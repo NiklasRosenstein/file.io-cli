@@ -11,6 +11,7 @@ setuptools.setup(
   author_email = 'rosensteinniklas@gmail.com',
   license = 'MIT',
   description = 'Command-line tool to upload files to https://file.io',
+  url = 'https://github.com/NiklasRosenstein/file.io-cli',
   install_requires = install_reqs,
   py_modules = ['file_io_cli'],
   entry_points = dict(
