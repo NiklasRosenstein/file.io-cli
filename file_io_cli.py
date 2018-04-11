@@ -25,7 +25,9 @@ import clipboard
 import json
 import os
 import requests
+import subprocess
 import sys
+import threading
 import time
 import uuid
 
@@ -148,8 +150,8 @@ class ProgressDisplay(object):
     self.alteration = 0
     self.last_print = None
 
-  def update(self, n_read):
-    if self.last_print is not None and time.clock() - self.last_print < 0.25:
+  def update(self, n_read, force=False):
+    if not force and self.last_print is not None and time.clock() - self.last_print < 0.25:
       return
     self.last_print = time.clock()
     self.__clear_line(file=sys.stderr)
@@ -190,6 +192,15 @@ def stream_file(fp, chunksize=8192):
     else: break
 
 
+def spawn_process(*args, **kwargs):
+  on_exit = kwargs.pop('on_exit', None)
+  def worker():
+    subprocess.call(*args, **kwargs)
+    if on_exit is not None:
+      on_exit()
+  threading.Thread(target=worker).start()
+
+
 def main(prog=None, argv=None):
   parser = argparse.ArgumentParser(prog=prog, description='Upload a file to file.io and print the download link. Supports stdin.')
   parser.add_argument('--version', action='version', version=__version__)
@@ -197,27 +208,40 @@ def main(prog=None, argv=None):
   parser.add_argument('-n', '--name', help='specify or override the filename')
   parser.add_argument('-q', '--quiet', action='store_true', help='hide the progress bar')
   parser.add_argument('-c', '--clip', action='store_true', help='copy the URL to your clipboard')
-  parser.add_argument('file', type=argparse.FileType('rb'), nargs='?', help='the file to upload')
+  parser.add_argument('-t', '--tar', metavar='PATH', help='create a TAR archive from the specified file or directory')
+  parser.add_argument('-z', '--gzip', action='store_true', help='filter the TAR archive through gzip (only with -t, --tar)')
+  parser.add_argument('file', nargs='?', help='the file to upload')
   args = parser.parse_args()
 
-  if not args.file and sys.stdin.isatty():
+  if not args.file and not args.tar and sys.stdin.isatty():
     parser.print_usage()
     return 0
+  if args.file and args.tar:
+    parser.error('conflicting options: file and -t, --tar')
 
-  if args.file:
-    file_size = os.stat(args.file.name).st_size
-    file_name = args.name or args.file.name
-    fp = args.file
+  if not args.name and args.file:
+    args.name = os.path.basename(args.file)
+  elif not args.name and args.tar:
+    args.name = os.path.basename(args.tar) + ('.tgz' if args.gzip else '.tar')
+
+  if args.tar:
+    r, w = os.pipe()
+    flags = '-czf-' if args.gzip else '-cf-'
+    spawn_process(['tar', flags, args.tar], stdout=w, on_exit=lambda: os.close(w))
+    file_size = None
+    fp = os.fdopen(r, 'rb')
+  elif args.file:
+    file_size = os.stat(args.file).st_size
+    fp = open(args.file, 'rb')
   else:
     file_size = None
-    file_name = args.name or 'file'
     fp = sys.stdin if sys.version_info[0] == 2 else sys.stdin.buffer
 
   if not args.quiet:
     progress = ProgressDisplay(file_size)
     fp = FileMonitor(fp, lambda f: progress.update(f.bytes_read))
 
-  encoder = MultipartFileEncoder('file', fp, filename=file_name)
+  encoder = MultipartFileEncoder('file', fp, filename=args.name or 'file')
   stream = GeneratorFileReader(encoder.iter_encode())
 
   headers = {'Content-Type': encoder.content_type}
@@ -242,13 +266,14 @@ def main(prog=None, argv=None):
     raise
   else:
     if not args.quiet:
+      progress.update(fp.bytes_read, force=True)
       progress.finish()
 
   link = response.json()['link']
 
   if args.clip:
     print(link, '(copied to clipboard)')
-    clipboard.copy(data['link'])
+    clipboard.copy(link)
   else:
     print(link)
 
