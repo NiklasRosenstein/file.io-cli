@@ -6,7 +6,7 @@ with open('requirements.txt') as fp:
 
 setuptools.setup(
   name = 'file.io-cli',
-  version = '1.0.0',
+  version = '1.0.1',
   author = 'Niklas Rosenstein',
   author_email = 'rosensteinniklas@gmail.com',
   license = 'MIT',
