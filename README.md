@@ -1,8 +1,8 @@
-
+# file.io-cli
 
     $ pip install file.io-cli
 
-&mdash; *Command-line tool to upload files to https://file.io*
+Command-line tool to upload files to https://file.io
 
   [file.io]: https://www.file.io
 
