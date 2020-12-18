@@ -58,6 +58,10 @@ https://file.io/uRglUT
 
 ### Changelog
 
+#### v1.0.2
+
+* Replaced `time.clock` (removed in python 3.8) with `time.perf_counter`
+
 #### v1.0.1
 
 * Add `-t, --tar` and `-z, --gzip` options

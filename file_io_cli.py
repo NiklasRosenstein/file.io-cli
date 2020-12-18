@@ -151,9 +151,9 @@ class ProgressDisplay(object):
     self.last_print = None
 
   def update(self, n_read, force=False):
-    if not force and self.last_print is not None and time.clock() - self.last_print < 0.25:
+    if not force and self.last_print is not None and time.perf_counter() - self.last_print < 0.25:
       return
-    self.last_print = time.clock()
+    self.last_print = time.perf_counter()
     self.__clear_line(file=sys.stderr)
     if self.n_max is None:
       c = self.SPINCHARS[self.alteration%len(self.SPINCHARS)]
