@@ -19,7 +19,7 @@ requirements = []
 
 setuptools.setup(
   name = 'file.io-cli',
-  version = '1.0.1',
+  version = '1.0.2',
   author = 'Niklas Rosenstein',
   author_email = 'rosensteinniklas@gmail.com',
   description = 'Command-line tool to upload files to https://file.io',
@@ -33,16 +33,11 @@ setuptools.setup(
   install_requires = requirements,
   extras_require = {},
   tests_require = [],
-  python_requires = None,  # '>=2.7,<3.0.0|>=3.3,<4.0.0',
+  python_requires = '>=3.3.0,<4.0.0',
   data_files = [],
   entry_points = {},
   cmdclass = {},
   keywords = [],
   classifiers = [],
   zip_safe = True,
-  options = {
-    'bdist_wheel': {
-      'universal': True,
-    },
-  },
 )

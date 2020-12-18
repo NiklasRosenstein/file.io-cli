@@ -61,6 +61,7 @@ https://file.io/uRglUT
 #### v1.0.2
 
 * Replaced `time.clock` (removed in python 3.8) with `time.perf_counter`
+* Minimum Python version is 3.3
 
 #### v1.0.1
 

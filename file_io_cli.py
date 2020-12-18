@@ -32,7 +32,7 @@ import time
 import uuid
 
 __author__ = 'Niklas Rosenstein <rosensteinniklas@gmail.com>'
-__version__ = '1.0.1'
+__version__ = '1.0.2'
 
 
 class MultipartFileEncoder(object):
