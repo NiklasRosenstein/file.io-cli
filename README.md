@@ -58,6 +58,10 @@ https://file.io/uRglUT
 
 ### Changelog
 
+#### v1.0.4
+
+* Fix missing entrypoint in new setup script
+
 #### v1.0.3
 
 * Fix declared dependencies in setup script

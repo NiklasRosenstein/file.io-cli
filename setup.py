@@ -38,7 +38,11 @@ setuptools.setup(
   tests_require = [],
   python_requires = '>=3.3.0,<4.0.0',
   data_files = [],
-  entry_points = {},
+  entry_points = {
+    'console_scripts': [
+      'file.io-cli = file_io_cli:_entry_point',
+    ]
+  },
   cmdclass = {},
   keywords = [],
   classifiers = [],

@@ -9,3 +9,6 @@ requirements:
 - clipboard ^0.0.4
 - requests ^2.25.1
 source-directory: .
+entrypoints:
+  console_scripts:
+  - file.io-cli = file_io_cli:_entry_point
