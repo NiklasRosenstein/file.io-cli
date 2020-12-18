@@ -22,7 +22,7 @@ requirements = [
 
 setuptools.setup(
   name = 'file.io-cli',
-  version = '1.0.3',
+  version = '1.0.4',
   author = 'Niklas Rosenstein',
   author_email = 'rosensteinniklas@gmail.com',
   description = 'Command-line tool to upload files to https://file.io',
