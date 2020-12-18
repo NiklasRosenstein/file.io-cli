@@ -1,9 +1,11 @@
 name: file.io-cli
 version: 1.0.2
 author: Niklas Rosenstein <rosensteinniklas@gmail.com>
-description: Command-line tool to upload files to https://file.io
-source-directory: .
-modulename: file_io_cli
 url: https://github.com/NiklasRosenstein/file.io-cli
+modulename: file_io_cli
+description: Command-line tool to upload files to https://file.io
 requirements:
 - python ^3.3
+- clipboard ^0.0.4
+- requests ^2.25.1
+source-directory: .
