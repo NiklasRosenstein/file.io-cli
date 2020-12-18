@@ -15,11 +15,14 @@ else:
   print("warning: file \"{}\" does not exist.".format(readme_file), file=sys.stderr)
   long_description = None
 
-requirements = []
+requirements = [
+  'clipboard >=0.0.4,<1.0.0',
+  'requests >=2.25.1,<3.0.0',
+]
 
 setuptools.setup(
   name = 'file.io-cli',
-  version = '1.0.2',
+  version = '1.0.3',
   author = 'Niklas Rosenstein',
   author_email = 'rosensteinniklas@gmail.com',
   description = 'Command-line tool to upload files to https://file.io',
